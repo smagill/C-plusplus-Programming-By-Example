@@ -59,7 +59,7 @@ def createLiftNoteCode(filePath, lineNum):
         'type'      : "CommentedCode",
         'message'   : "Code should not be commented out.",
         'file'      : filePath,
-        'line'      : lineNume,
+        'line'      : lineNum,
         'column'    : 0,
     }
 
@@ -68,7 +68,7 @@ def createLiftNoteComment(filePath, lineNum):
         'type'      : "MultiLineComment",
         'message'   : "Multiline comments are not allowed.",
         'file'      : filePath,
-        'line'      : lineNume,
+        'line'      : lineNum,
         'column'    : 0,
     }
 
@@ -80,7 +80,7 @@ def addJSHintConfigIfNotExists(path):
         return ["--config=/home/lift/.jshintrc"]
 
 def readfiles(codedir, pattern):
-    res = subprocess.run(["git","ls-files","*.c"], capture_output=True)
+    res = subprocess.run(["git","ls-files",pattern], capture_output=True)
     files = res.stdout.decode("utf-8").split('\n')
     files = list(filter(lambda x: os.path.exists(x), files))
     return files
@@ -88,30 +88,27 @@ def readfiles(codedir, pattern):
 def analyze_file(filename):
     linenum = 1
     single_line_re = re.compile('//.*;')
-    multi_line_pos_re = re.compile('/*')
-    multi_line_neg_re = re.compile('*/')
+    multi_line_pos_re = re.compile('/\*')
+    multi_line_neg_re = re.compile('\*/')
     results = list()
     with open(filename) as f:
         for line in f:
             if single_line_re.search(line):
-                results.append(createLiftNoteCode(filename,line))
+                results.append(createLiftNoteCode(filename,linenum))
             elif multi_line_pos_re.search(line) and (not multi_line_neg_re.search(line)):
-                results.append(createLiftNoteComment(filename,line))
-            line += 1
+                results.append(createLiftNoteComment(filename,linenum))
+            linenum += 1
+    return results
 
 def analyze(codedir):
-    to_execute = ["jshint"]
-    if len(config) > 0:
-        to_execute.extend(config)
-
     c_files = readfiles(codedir,"*.c")
     cpp_files = readfiles(codedir,"*.cpp")
     cc_files = readfiles(codedir,"*.cc")
     filenames = c_files + cpp_files + cc_files
 
     results = list()
-    for file in files:
-        results += analyze_file(filenames)
+    for file in filenames:
+        results += analyze_file(file)
     return results
 
 def run(args):
