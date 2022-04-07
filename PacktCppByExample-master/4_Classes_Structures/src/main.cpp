@@ -71,10 +71,13 @@ public:
 
     bool keep_playing()
     {
+        /*
         std::cout << "Play again? (Y/N): ";
         char response;
         std::cin >> response;
         return response == 'y' || response == 'Y';
+        */
+        return true;
     }
 
     int get_bet_amount()
@@ -126,7 +129,7 @@ public:
 
 int main()
 {
-    std::cout << "----- Casino! -----" << std::endl;
+  //  std::cout << "----- Casino! -----" << std::endl;
     const player m_player;
     game game(m_player);
     game.start_game();
