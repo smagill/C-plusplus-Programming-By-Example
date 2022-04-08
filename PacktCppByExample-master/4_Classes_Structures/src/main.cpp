@@ -67,14 +67,20 @@ public:
         std::getline(std::cin, player_.name);
         std::cout << "Enter start money amount: ";
         std::cin >> player_.total_money;
+        // Try some debugging
+        //std::cout << "Name is: " << player_.name;
+        //std::cout << "Amount is: " << player_.total_money;
     }
 
     bool keep_playing()
     {
+        /*
         std::cout << "Play again? (Y/N): ";
         char response;
         std::cin >> response;
-        return response == 'y' || response == 'Y';
+        // std::cout << "Got: " << response;
+        return response == 'y' || response == 'Y';*/
+        return true;
     }
 
     int get_bet_amount()
