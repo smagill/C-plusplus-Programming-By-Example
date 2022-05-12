@@ -50,7 +50,8 @@ inline std::ostream& operator<<(std::ostream& output, const contact &person)
 
 bool compare_by_first_name(const contact& first, const contact &second)
 {
-	return std::get<0>(first) < std::get<0>(second);
+	//return std::get<0>(first) < std::get<0>(second);
+	return false;
 }
 
 bool compare_by_last_name(const contact& first, const contact& second)
